@@ -5,7 +5,6 @@ trait Singleton {
 	protected static $instance;
 	public static function getInstance() {
         if(static::$instance === null) {
-			//$class = get_called_class();
 			static::$instance = new static;
 		}
         return static::$instance;

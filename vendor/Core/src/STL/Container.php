@@ -15,7 +15,7 @@ class Container implements ArrayAccess, Iterator, Countable {
         $this->storage[$offset] = $value;
     }
     public function offsetGet($offset) {
-        return isset($this->storage[$offset]) ? $this->storage[$offset] : null;
+        return $this->storage[$offset];
     }
     public function offsetExists($offset) {
         return isset($this->storage[$offset]);
