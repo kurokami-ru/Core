@@ -4,11 +4,11 @@ namespace Core;
 use \Core\STL\Container;
 
 class App extends Container {
-	function process($data = null) {
-		foreach($this as $ware) {
-			$data = $ware->process($data);
+	function process() {
+		$response = new \Core\HTTP\Response(new \Core\HTTP\Request);
+		foreach($this as $middleware) {
+			$response = $middleware->process($response);
 		}
-		return $data;
 	}
 }
 ?>
