@@ -2,10 +2,10 @@
 namespace Core;
 
 use \Core\STL\Container;
-use \Core\STL\Singleton;
+use \Core\STL\SingletonTrait;
 
 class Loader extends Container {
-	use Singleton;
+	use SingletonTrait;
 	private function __construct() {
 		parent::__construct(include("../autoload.php"));
 		spl_autoload_register([$this, "autoload"]);

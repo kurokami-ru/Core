@@ -1,7 +1,7 @@
 <?php
 namespace Core\STL;
 
-trait Singleton {
+trait SingletonTrait {
 	protected static $instance;
 	public static function getInstance() {
         if(static::$instance === null) {

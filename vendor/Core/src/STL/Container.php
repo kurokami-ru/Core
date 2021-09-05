@@ -1,11 +1,9 @@
 <?php
 namespace Core\STL;
 
-use \Core\STL\ArrayAccess;
-use \Iterator;
-use \Countable;
+use \Core\STL\ContainerInterface;
 
-class Container implements ArrayAccess, Iterator, Countable {
+class Container implements ContainerInterface {
 	private $storage;
 	public function __construct($input = []) {
 		$this->storage = $input;
@@ -29,8 +27,7 @@ class Container implements ArrayAccess, Iterator, Countable {
 		$this->position = 0;
 	}
 	public function current() {
-		$keys = array_keys($this->storage);
-		return $this->storage[$keys[$this->position]];
+		return $this->offsetGet($this->key());
 	}
 	public function key() {
 		$keys = array_keys($this->storage);
@@ -41,8 +38,9 @@ class Container implements ArrayAccess, Iterator, Countable {
 	}
 	public function prev() {
 		--$this->position;
-		if($this->position < 0)
+		if($this->position < 0) {
 			$this->position = 0;
+		}
 	}
 	public function valid() {
 		return $this->position < count($this->storage);

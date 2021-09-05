@@ -2,6 +2,6 @@
 namespace Core\Middleware;
 
 interface MiddlewareInterface {
-	function process($data);
+	public function process($data);
 }
 ?>
