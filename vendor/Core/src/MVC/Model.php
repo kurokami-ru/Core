@@ -5,9 +5,8 @@ use \Core\STL\ContainerInterface;
 
 class Model implements ContainerInterface {
 	private $adapter;
-	public function __construct($adapter = null) {
+	public function __construct($adapter) {
 		$this->adapter = $adapter;
-		//parent::__construct($adapter);
 	}
 
     public function offsetSet($offset, $value) {

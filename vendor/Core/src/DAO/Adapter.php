@@ -3,6 +3,6 @@ namespace Core\DAO;
 
 use \Core\STL\Container;
 
-class Adapter extends Container {
+abstract class Adapter extends Container {
 }
 ?>

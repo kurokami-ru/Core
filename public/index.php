@@ -1,11 +1,17 @@
 <?php
-include __DIR__ . "/../debug.php";
+//include __DIR__ . "/../debug.php";
+require_once "../vendor/Core/src/STL/ArrayAccess.php";
+require_once "../vendor/Core/src/STL/ContainerInterface.php";
+require_once "../vendor/Core/src/STL/Container.php";
+require_once "../vendor/Core/src/STL/SingletonTrait.php";
+require_once "../vendor/Core/src/App.php";
+require_once "../vendor/Core/src/Middleware/MiddlewareInterface.php";
+require_once "../vendor/Core/src/Middleware/Loader.php";
 
-include __DIR__ . "/../vendor/autoload.php";
-
-//(new \Core\App(include("../application.php")))->process();
-$model = new \Core\MVC\Model(new \Core\DAO\Native("../Blog/data.php"));
-debug($model);
-$controller = new \Core\MVC\Controller($model);
-debug($controller);
+\Core\App::getInstance()->process();
+//$model = new \Core\MVC\Model(new \Core\DAO\Native("../Blog/data.php"));
+//debug($model);
+//$controller = new \Core\MVC\Controller($model, include("../Blog/actions.php"));
+//debug($controller);
+//$controller->ac1();
 ?>

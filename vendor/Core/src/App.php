@@ -2,8 +2,13 @@
 namespace Core;
 
 use \Core\STL\Container;
+use \Core\STL\SingletonTrait;
 
 class App extends Container {
+	use SingletonTrait;
+	private function __construct() {
+		parent::__construct(include("../application.php"));
+	}
 	function process() {
 		$request = new \Core\HTTP\Request(
 			$_SERVER["REQUEST_METHOD"],

@@ -6,8 +6,7 @@ use \Core\Middleware\MiddlewareInterface;
 
 class Router extends Container implements MiddlewareInterface {
 	public function process($response) {
-		message(__CLASS__);
-		debug($response);
+		\Core\App::getInstance()["logger"]->info(__CLASS__/*,['file' => __FILE__, 'line' => __LINE__, 'var' => $response]*/);
 		foreach($this as $path => $route) {
 			$request = $response->request;
 			$args = [];

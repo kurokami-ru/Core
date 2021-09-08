@@ -12,6 +12,9 @@ class Controller extends Container {
 	public function __call($name, $arguments) {
 		message("Call $name with");
 		debug($arguments);
+		if(isset($this[$name])) {
+			$this[$name]($this->model);
+		}
 	}
 }
 ?>
