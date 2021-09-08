@@ -12,8 +12,9 @@ The Core PHP Framework is being developed for educational and demonstration purp
 
 ## Expected
 
+- placeholders for router, viewer, logger
 - comments for all files in PHPDoc style
-- Loader and Logger as services
+- include files before autoloding
 - my own css mini framework similar bootstrap
 
 ## License

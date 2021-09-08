@@ -1,5 +1,8 @@
 <?php
-//include __DIR__ . "/../debug.php";
+error_reporting(E_ALL);
+ini_set('display_errors', true);
+ini_set('display_startup_errors', true);
+
 require_once "../vendor/Core/src/STL/ArrayAccess.php";
 require_once "../vendor/Core/src/STL/ContainerInterface.php";
 require_once "../vendor/Core/src/STL/Container.php";
