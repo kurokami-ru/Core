@@ -1,7 +1,9 @@
 <?php
-namespace URI;
+namespace Core\HTTP\URI;
 
-class query extends \STL\ArrayArray {
+use \Core\STL\Container;
+
+class query extends Container {
 	function __construct($query) {
 		parse_str($query, $query);
 		parent::__construct($query);

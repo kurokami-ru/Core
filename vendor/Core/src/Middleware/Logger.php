@@ -1,12 +1,16 @@
 <?php
 namespace Core\Middleware;
 
-use \Core\Log\AbstractLogger;
+use \Core\Log\LogManager;
 use \Core\Middleware\MiddlewareInterface;
+use \Core\App;
 
-class Logger extends AbstractLogger implements MiddlewareInterface {
+class Logger extends LogManager implements MiddlewareInterface {
+	public function __construct() {
+		parent::__construct(include("../loggers.php"));
+	}
 	public function process($response) {
-		\Core\App::getInstance()["logger"]->info(__CLASS__);
+		App::getInstance()["logger"]->info(__CLASS__);
 		return $response;
 	}
 }

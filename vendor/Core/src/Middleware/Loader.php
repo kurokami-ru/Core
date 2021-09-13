@@ -3,6 +3,7 @@ namespace Core\Middleware;
 
 use \Core\STL\Container;
 use \Core\Middleware\MiddlewareInterface;
+use \Core\App;
 
 class Loader extends Container implements MiddlewareInterface {
 	public function __construct() {
@@ -26,7 +27,7 @@ class Loader extends Container implements MiddlewareInterface {
 		}	
 	}
 	public function process($response) {
-		\Core\App::getInstance()["logger"]->info(__CLASS__);
+		App::getInstance()["logger"]->info(__CLASS__);
 		return $response;
 	}
 }

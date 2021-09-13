@@ -8,13 +8,12 @@ The Core PHP Framework is being developed for educational and demonstration purp
 
 - modular core
 - application as service locator
-- creating application as tuning
+- many data source adapters
 
 ## Expected
 
 - placeholders for router, viewer, logger
 - comments for all files in PHPDoc style
-- include files before autoloding
 - my own css mini framework similar bootstrap
 
 ## License

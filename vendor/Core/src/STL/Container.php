@@ -43,7 +43,7 @@ class Container implements ContainerInterface {
 		}
 	}
 	public function valid() {
-		return $this->position < count($this->storage);
+		return $this->position < $this->count();
 	}
 
 	public function count() {

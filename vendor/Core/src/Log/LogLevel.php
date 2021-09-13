@@ -11,7 +11,7 @@ class LogLevel
     const NOTICE    = 'notice';
     const INFO      = 'info';
     const DEBUG     = 'debug';
-	/*public static function getLevel($errno) {
+	public static function getLevel($errno) {
 		switch($errno) {
             case E_ERROR:
 			case E_CORE_ERROR:
@@ -35,5 +35,5 @@ class LogLevel
 			default:
 				return 'unknown';
 		}
-	}*/
+	}
 }

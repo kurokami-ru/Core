@@ -1,7 +1,9 @@
 <?php
-namespace URI;
+namespace Core\HTTP\URI;
 
-class path extends \STL\ArrayArray {
+use \Core\STL\Container;
+
+class path extends Container {
 	function __construct($path) {
 		parent::__construct(explode("/", trim($path, "/")));
 	}

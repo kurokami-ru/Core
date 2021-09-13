@@ -1,11 +1,25 @@
 <?php
 namespace Core\Log;
 
-use \Core\Log\LoggerInterface;
+use \Core\STL\Container;
 use \Core\Log\LogLevel;
+use \Core\Log\LoggerInterface;
 
-abstract class AbstractLogger implements LoggerInterface
-{
+class LogManager extends Container implements LoggerInterface {
+	private $container;
+	public function __construct($input = []) {
+		parent::__construct($input);
+		set_error_handler([$this, "errorHandler"]);
+		set_exception_handler([$this, "exceptionHandler"]);
+	}
+	public function errorHandler($errno, $errstr, $errfile, $errline) {
+		$this->log(LogLevel::getLevel($errno), $errstr, 
+			["exception" => new \ErrorException($errstr, 0, $errno, $errfile, $errline)]);
+	}
+	public function exceptionHandler($exception) {
+		$this->log(LogLevel::CRITICAL, $exception->getMessage(), 
+			["exception" => $exception]);
+	}
     public function emergency($message, array $context = []) {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
@@ -31,5 +45,9 @@ abstract class AbstractLogger implements LoggerInterface
         $this->log(LogLevel::DEBUG, $message, $context);
     }
 	public function log($level, $message, array $context= []) {
+		foreach($this as $logger) {
+			$logger->log($level, $message, $context);
+		}
 	}
 }
+?>
