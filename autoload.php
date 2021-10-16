@@ -1,6 +1,4 @@
 <?php
-return [
-	"Core\\" => "vendor/Core/src",
-	"" => ""
-];
+spl_autoload_register();
+require_once "vendor/autoload.php";
 ?>

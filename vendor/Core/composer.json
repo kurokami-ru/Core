@@ -1,0 +1,21 @@
+{
+    "name": "Core",
+    "description": "Framework for my sites",
+    "keywords": ["framework"],
+    "homepage": "https://github.com/kurokami-ru/Core",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergey Doroshenko",
+            "homepage": "http://kurokami.ru"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "src/"
+        }
+    }
+}

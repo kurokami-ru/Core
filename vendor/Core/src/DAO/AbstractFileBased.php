@@ -3,7 +3,7 @@ namespace Core\DAO;
 
 use \Core\STL\Container;
 
-abstract class File extends Container {
+abstract class AbstarctFileBased extends Container implements AdapterInterface {
 	protected $url;
 	public function __construct($url) {
 		$this->url = $url;

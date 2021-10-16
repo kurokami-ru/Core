@@ -44,5 +44,19 @@ class Model implements ContainerInterface {
 	public function count() {
 		return $this->adapter->count();
 	}
+
+	public function column($offset) {
+		$ret = [];
+		foreach($this as $key => $val) {
+			$ret[$key] = $val[$offset];
+		}
+		return $ret;
+	}
+	private $filter = [];
+	public function setfilter($input = []) {
+		$last = $this->filter;
+		$this->filter = $input;
+		return $last;
+	}
 }
 ?>

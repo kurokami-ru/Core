@@ -1,18 +1,18 @@
 <?php
 namespace Core\DAO;
 
-use \Core\STL\ContainerINterface;
+use \Core\DAO\AdapterInterface;
 use \mysqli;
 use \mysqli_sql_exception;
 use \RuntimeException;
 
-class mySQL /*extends Adapter*/implements ContainerInterface {
+class mySQL implements AdapterInterface {
 	private $url;
 	private $link;
 	private $keyname;
 	public function __construct($url) {
 		$this->url = $url;
-		debug($this->url);
+		//debug($this->url);
 		$host = 'localhost';
 		$user = 'root';
 		$pass = '';
@@ -23,14 +23,14 @@ class mySQL /*extends Adapter*/implements ContainerInterface {
 			throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
 		}
 		$query = "SHOW INDEX FROM {$this->url} WHERE Key_name = \"PRIMARY\";";
-		debug($query);
+		//debug($query);
 		try {
 			$result = $this->link->query($query, MYSQLI_USE_RESULT);
 			$this->keyname = $result->fetch_assoc()['Column_name'];
 			mysqli_free_result($result);
-			debug($this->keyname);
+			//debug($this->keyname);
 		} catch (mysqli_sql_exception $e) {
-			debug($e);
+			throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
 
@@ -44,7 +44,7 @@ class mySQL /*extends Adapter*/implements ContainerInterface {
 			$pairs .= (!empty($pairs) ? ', ' : '') . $this->link->real_escape_string($key) . ' = ' . (!is_numeric($val) ? '"' . $this->link->real_escape_string($val) . '"' : $val);
 		}
 		$query = "INSERT INTO {$this->url} ($fields) VALUES ($values) ON DUPLICATE KEY UPDATE $pairs LIMIT 1 ;";
-		debug($query);
+		//debug($query);
 		try {
 			/*$result = */$this->link->query($query);
 		} catch (mysqli_sql_exception $e) {
@@ -53,7 +53,7 @@ class mySQL /*extends Adapter*/implements ContainerInterface {
     }
     public function offsetGet($offset) {
 		$query = "SELECT * FROM {$this->url} WHERE {$this->keyname} = $offset LIMIT 1;";
-		debug($query);
+		//debug($query);
 		try {
 			$result = $this->link->query($query, MYSQLI_USE_RESULT);
 			$value = $result->fetch_assoc();
@@ -65,7 +65,7 @@ class mySQL /*extends Adapter*/implements ContainerInterface {
     }
     public function offsetExists($offset) {
 		$query = "SELECT COUNT(*) FROM {$this->url} WHERE {$this->keyname} = $offset LIMIT 1;";
-		debug($query);
+		//debug($query);
 		try {
 			$result = $this->link->query($query, MYSQLI_USE_RESULT);
 			$value = $result->fetch_assoc();
@@ -77,7 +77,7 @@ class mySQL /*extends Adapter*/implements ContainerInterface {
     }
     public function offsetUnset($offset) {
 		$query = "DELETE FROM {$this->url} WHERE {$this->keyname} = $offset LIMIT 1;";
-		debug($query);
+		//debug($query);
 		try {
 			/*$result = */$this->link->query($query);
 		} catch (mysqli_sql_exception $e) {
@@ -94,7 +94,7 @@ class mySQL /*extends Adapter*/implements ContainerInterface {
 	}
 	public function key() {
 		$query = "SELECT * FROM {$this->url} LIMIT {$this->position}, 1;";
-		debug($query);
+		//debug($query);
 		try {
 			$result = $this->link->query($query, MYSQLI_USE_RESULT);
 			$value = $result->fetch_assoc();
@@ -119,7 +119,7 @@ class mySQL /*extends Adapter*/implements ContainerInterface {
 
 	public function count() {
 		$query = "SELECT COUNT(*) FROM {$this->url};";
-		debug($query);
+		//debug($query);
 		try {
 			$result = $this->link->query($query, MYSQLI_USE_RESULT);
 			$value = $result->fetch_assoc();

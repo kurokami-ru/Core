@@ -4,14 +4,12 @@ namespace Core\MVC;
 use \Core\STL\Container;
 
 class Controller extends Container {
-	private $model;
+	protected $model;
 	public function __construct($model, $input = []) {
-		parent::__construct($input);
 		$this->model = $model;
+		parent::__construct($input);
 	}
 	public function __call($name, $arguments) {
-		message("Call $name with");
-		debug($arguments);
 		if(isset($this[$name])) {
 			$this[$name]($this->model);
 		}

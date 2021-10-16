@@ -2,9 +2,8 @@
 
 ## Futures
 
+- class for stream/file
 - mySQL ini
-- logmanager
-- placeholders as {} in strings
 - serealization for closure
 
 ## Tests

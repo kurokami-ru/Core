@@ -11,5 +11,5 @@ interface LoggerInterface
     public function notice($message, array $context = []);
     public function info($message, array $context = []);
     public function debug($message, array $context = []);
-	public function log($level, $message, array $context= []);
+	//public function log($level, $message, array $context= []);
 }

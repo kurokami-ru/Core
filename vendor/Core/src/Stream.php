@@ -24,14 +24,14 @@ class Stream {
     }
     public function isReadable() {
 		$meta = $this->metadata();
-		if(strpbrk($meta['mode'], "r+") !== false) {
+		if(strpbrk($meta['mode'], 'r+') !== false) {
 			return true;
 		}
 		return false;
     }
     public function isWritable() {
 		$meta = $this->metadata();
-		if($meta['mode'] != "r") {
+		if($meta['mode'] != 'r') {
 			return true;
 		}
         return false;

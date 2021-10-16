@@ -3,7 +3,7 @@ namespace Core\DAO;
 
 use \Core\DAO\File;
 
-class Native extends File {
+class Native extends AbstarctFileBased {
 	protected function unserialize() {
 		$data = file_get_contents($this->url);
 		return eval(substr($data, 5, strlen($data) - 7));	
