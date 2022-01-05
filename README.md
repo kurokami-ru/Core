@@ -8,6 +8,7 @@ The Core PHP Framework is being developed for educational and demonstration purp
 
 - sessions
 - router
+- SMTP (send mails)
 
 ## License
 
