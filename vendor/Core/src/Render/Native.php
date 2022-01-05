@@ -1,15 +1,14 @@
 <?php
 namespace Core\Render;
 
-use \Core\Render\RenderInterface;
+use Core\Render\RenderInterface;
 
 class Native implements RenderInterface {
 	protected $template;
-	public function __construct($template) {
+	public function __construct(string $template) {
 		$this->template = $template;
 	}
-	public function render($data = []) {
-		//message($this->template);
+	public function render(array $data = []) {
 		$tmpFile = tmpfile();
 		$tmpName = stream_get_meta_data($tmpFile)['uri'];
 		fwrite($tmpFile, $this->template);

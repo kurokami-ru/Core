@@ -1,11 +1,11 @@
 <?php
 namespace Core\Render;
 
-use \Core\Render\RenderInterface;
+use Core\Render\RenderInterface;
 
 class Brackets implements RenderInterface {
 	protected $template;
-	public function __construct($template) {
+	public function __construct(string $template) {
 		$this->template = $template;
 	}
 	public function render($data = []) {

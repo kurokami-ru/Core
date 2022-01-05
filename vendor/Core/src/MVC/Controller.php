@@ -1,18 +1,13 @@
 <?php
+
 namespace Core\MVC;
 
-use \Core\STL\Container;
+use Core\MVC\Model;
 
-class Controller extends Container {
+class Controller {
 	protected $model;
-	public function __construct($model, $input = []) {
+
+	public function __construct(Model $model) {
 		$this->model = $model;
-		parent::__construct($input);
-	}
-	public function __call($name, $arguments) {
-		if(isset($this[$name])) {
-			$this[$name]($this->model);
-		}
 	}
 }
-?>

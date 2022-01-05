@@ -1,20 +1,13 @@
-# Core PHP Framework
+# Core PHP Framework as Library
 
 ## About this project
 
-The Core PHP Framework is being developed for educational and demonstration purposes. I am currently only at the beginning of development.
+The Core PHP Framework is being developed for educational and demonstration purposes. 
 
-## Futures
+## Troubleshoot
 
-- modular core
-- application as service locator
-- many data source adapters
-
-## Expected
-
-- placeholders for router, viewer, logger
-- comments for all files in PHPDoc style
-- my own css mini framework similar bootstrap
+- sessions
+- router
 
 ## License
 

@@ -1,14 +1,14 @@
 <?php
 namespace Core\MVC;
 
-use \Core\Renders\RenderInterface;
+use Core\Render\RenderInterface;
 
-abstract class View implements RenderInterface {	
+class View implements RenderInterface {	
 	private $render;
-	public function __construct($render) {
+	public function __construct(RenderInterface $render) {
 		$this->render = $render;
 	}
-	public function render($data = []) {
+	public function render(array $data = []): string {
 		$tris->render->render($data);
 	}
 }

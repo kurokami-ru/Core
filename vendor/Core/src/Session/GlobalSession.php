@@ -1,21 +1,19 @@
 <?php
 
-namespace Core\STL;
+namespace Core\Session;
 
-use Core\STL\UnexpectedValueException;
-
-trait ImmutableTrait {
+class GlobalSession {
 	public function __get(string $name): mixed {
-		return $this->$name;
+		return $_SESSION[$name];
 	}
 	public function __set(string $name, mixed $value): void {
-		throw new UnexpectedValueException;
+		$_SESSION[$name] = $value;
 	}
 	public function __isset(string $name): bool {
-		return isset($this->$name);
+		return isset($_SESSION[$name]);
 	}
 	public function __unset(string $name): void {
-		throw new UnexpectedValueException;
+		unset($_SESSION[$name]);
 	}
 }
 ?>

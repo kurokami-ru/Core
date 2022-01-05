@@ -1,5 +1,5 @@
 <h2>Login</h2>
-<form action="login" method="post">
+<form action="login" method="POST">
 	<label for="name">
 		Name
 		<input type="text" name="name" id="name" placeholder="enter name" required maxlength="10" />

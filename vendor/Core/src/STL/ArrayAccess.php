@@ -3,9 +3,9 @@
 namespace Core\STL;
 
 interface ArrayAccess extends \ArrayAccess {
-	public function offsetExists($offset);
-	public function offsetGet($offset);
-	public function offsetSet($offset, $value);
-	public function offsetUnset($offset);
+	public function offsetExists(mixed $offset): bool;
+	public function offsetGet(mixed $offset): mixed;
+	public function offsetSet(mixed $offset, mixed $value): void;
+	public function offsetUnset(mixed $offset): void;
 }
 ?>

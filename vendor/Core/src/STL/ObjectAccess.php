@@ -3,9 +3,9 @@
 namespace Core\STL;
 
 interface ObjectAccess {
-	public function __set($name, $value);
-	public function __get($name);
-	public function __isset($name);
-	public function __unset($name);
+	public function __set(string $name, mixed $value): void;
+	public function __get(string $name): mixed;
+	public function __isset(string $name): bool;
+	public function __unset(string $name): void;
 }
 ?>

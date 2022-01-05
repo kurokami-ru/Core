@@ -1,5 +1,5 @@
 <h2>Регистрация пользователя</h2>
-<form action="signup" method="post">
+<form action="signup" method="POST">
 	<label for="name">
 		Name
 		<input type="text" name="name" id="name" placeholder="enter name" required maxlength="10" />
