@@ -26,7 +26,12 @@ function http_parse_query(?string $query):?array {
 	return $ret;
 }
 
+function encode($data) {
+	return "=?utf-8?Q?".str_replace("+","_",str_replace("%","=",urlencode($data)))."?=";
+}
+
 require_once "../autoload.php";
+
 $null = new Core\HTTP\NullHandler;
 $users = new Users\Controller;
 $blog = new Blog\Controller;

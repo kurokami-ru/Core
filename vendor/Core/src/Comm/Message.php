@@ -3,7 +3,6 @@
 namespace Core\Comm;
 
 use Core\STL\ImmutableTrait;
-use Core\Comm\Head;
 
 class Message {
 	protected $head;
@@ -27,17 +26,7 @@ class Message {
 			}
 		}
 		$str .= "\r\n";
-		if(is_array($this->body)) {
-			//boundary from head
-			foreach($this->body as $message) {
-				$str .= "--boundary\r\n";
-				$str .= $message;
-				$str .= "\r\n";
-			}
-			$str .= "--boundary--\r\n";
-		} else {
-			$str .= $this->body;
-		}
+		$str .= $this->body;
 		return $str;
 	}
 }
