@@ -57,7 +57,7 @@ class Server {
 	public function send(Response $response): void {
 		$reason = ResponseStatusInterface::REASONS[$response->status];
 		header("HTTP/{$response->version} {$response->status} $reason", true, $response->status);
-		foreach($response->head as $key => $val) {
+		foreach($response as $key => $val) {
 			if(is_array($val)) {
 				foreach($val as $row) {
 					header("$key: $row");

@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Comm;
+namespace Core\CC;
 
-use Core\Comm\Message;
+use Core\CC\Message;
 
 interface ClientInterface {
 	public function send(Message $request): Message;

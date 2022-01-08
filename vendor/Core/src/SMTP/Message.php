@@ -5,7 +5,7 @@ namespace Core\SMTP;
 class Message extends \Core\Comm\Message {
 	public function __toString(): string {
 		$str = '';
-		foreach($this->head as $key => $val) {
+		foreach($this as $key => $val) {
 			if(is_array($val)) {
 				foreach($val as $row) {
 					$str .= "$key: $row\r\n";

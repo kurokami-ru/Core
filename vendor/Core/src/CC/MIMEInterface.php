@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Comm;
+namespace Core\CC;
 
 //https://www.iana.org/assignments/media-types/application.csv
 

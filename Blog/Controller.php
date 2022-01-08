@@ -7,7 +7,7 @@ use Core\DSO\Native;
 use Core\HTTP\Request;
 use Core\HTTP\Response;
 use Core\HTTP\ResponseStatusInterface;
-use Core\Comm\URL;
+use Core\CC\URL;
 
 class Controller extends \Core\MVC\Controller {
 	function __construct() {

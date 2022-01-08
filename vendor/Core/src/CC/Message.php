@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Comm;
+namespace Core\CC;
 
 use Core\STL\ImmutableTrait;
 

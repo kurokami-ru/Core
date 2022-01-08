@@ -32,25 +32,27 @@ function encode($data) {
 
 require_once "../autoload.php";
 
+
 $null = new Core\HTTP\NullHandler;
 $users = new Users\Controller;
 $blog = new Blog\Controller;
 
 $router = new Core\HTTP\Router([
-	[ 'rules' => [ 'path' => '/' ], 'action' => $null ],
-	[ 'rules' => [ 'path' => '/users' ], 'action' => [ $users, 'index' ] ],
-	[ 'rules' => [ 'path' => '/login' ], 'action' => [ $users, 'login' ] ],
-	[ 'rules' => [ 'path' => '/logout' ], 'action' => [ $users, 'logout' ] ],
-	[ 'rules' => [ 'path' => '/signup' ], 'action' => [ $users, 'signup' ] ],
-	[ 'rules' => [ 'path' => '/blog' ], 'action' => [ $blog, 'index' ] ],
-	[ 'rules' => [ 'path' => '/post/{id}' ], 'action' => [ $blog, 'read' ] ]
+	[ 'path' => '/' , 'action' => $null ],
+	[ 'path' => '/users', 'action' => [ $users, 'index' ] ],
+	[ 'path' => '/login', 'action' => new Core\HTTP\Methodist([
+		[ 'method' => 'GET', 'action' => [ $users, 'login' ] ],
+		[ 'method' => 'POST',  'action' => [ $users, 'login' ] ]
+	]) ],
+	[ 'path' => '/blog', 'action' => [ $blog, 'index' ] ],
+	[ 'path' => '/post/{id}', 'action' => $null ]
 ]);
 
 session_start();
 $server = new Core\HTTP\Server;
 $request = $server->recive();
 //debug($request);
-//debug($_SESSION);
+//$response = $null($request);
 $response = $router($request);
 //debug($response);
 $server->send($response);

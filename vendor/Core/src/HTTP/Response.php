@@ -2,7 +2,7 @@
 
 namespace Core\HTTP;
 
-use Core\Comm\Message;
+use Core\CC\Message;
 use Core\STL\ImmutableTrait;
 use Core\HTTP\ResponseStatusInterface;
 
