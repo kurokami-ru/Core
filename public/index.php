@@ -15,45 +15,23 @@ function message($str) {
 	echo "</pre>\n";
 }
 
-function http_parse_query(?string $query):?array {
-	if(!isset($query)) {
-		return null;
-	}
-	if(empty($query)) {
-		return [];
-	}
-	parse_str($query, $ret);
-	return $ret;
-}
-
-function encode($data) {
-	return "=?utf-8?Q?".str_replace("+","_",str_replace("%","=",urlencode($data)))."?=";
-}
-
 require_once "../autoload.php";
 
-
 $null = new Core\HTTP\NullHandler;
-$users = new Users\Controller;
-$blog = new Blog\Controller;
+$form = new Core\HTTP\FormHandler;
 
-$router = new Core\HTTP\Router([
-	[ 'path' => '/' , 'action' => $null ],
-	[ 'path' => '/users', 'action' => [ $users, 'index' ] ],
-	[ 'path' => '/login', 'action' => new Core\HTTP\Methodist([
-		[ 'method' => 'GET', 'action' => [ $users, 'login' ] ],
-		[ 'method' => 'POST',  'action' => [ $users, 'login' ] ]
-	]) ],
-	[ 'path' => '/blog', 'action' => [ $blog, 'index' ] ],
-	[ 'path' => '/post/{id}', 'action' => $null ]
-]);
+$map = [
+	'/' => $null,
+	//'/{i}' => [ 'GET' => $null, 'POST' => $null ]
+	'/form' => $form,
+	'/action' => $null
+];
+$router = new Core\HTTP\Router\Handler($map);
 
-session_start();
+$session = new Core\HTTP\Session\Handler;
+
 $server = new Core\HTTP\Server;
-$request = $server->recive();
-//debug($request);
-//$response = $null($request);
-$response = $router($request);
-//debug($response);
-$server->send($response);
+//session_start();
+$server->send($session($server->recive(), $router));
+//debug($_SERVER);
 ?>

@@ -2,7 +2,7 @@
 
 namespace Core\STL;
 
-use Core\STL\UnexpectedValueException;
+use Core\STL\Exception\UnexpectedValueException;
 
 trait ImmutableTrait {
 	public function __get(string $name): mixed {

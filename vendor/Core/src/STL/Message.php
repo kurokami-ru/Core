@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\CC;
+namespace Core\STL;
 
 use Core\STL\ImmutableTrait;
 
@@ -17,13 +17,14 @@ class Message {
 	public function __toString(): string {
 		$str = '';
 		foreach($this->head as $key => $val) {
-			if(is_array($val)) {
-				foreach($val as $row) {
-					$str .= "$key: $row\r\n";
+			$str .= "$key: $val\r\n";
+			/*if(is_array($val)) {
+				foreach($val as $item) {
+					$str .= "$key: $item\r\n";
 				}
 			} else {
 				$str .= "$key: $val\r\n";
-			}
+			}*/
 		}
 		$str .= "\r\n";
 		$str .= $this->body;

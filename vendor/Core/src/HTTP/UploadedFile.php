@@ -3,6 +3,7 @@
 namespace Core\HTTP;
 
 use Core\HTTP\UploadedFileStatusInterface;
+use Core\STL\ImmutableTrait;
 
 class UploadedFile implements UploadedFileStatusInterface {
 	private $stream;

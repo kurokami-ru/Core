@@ -2,69 +2,69 @@
 
 namespace Core\HTTP;
 
-use Core\Comm\URL;
+use Core\HTTP\ServerInterface;
 use Core\HTTP\Request;
 use Core\HTTP\UploadedFile;
 use Core\HTTP\Response;
 use Core\HTTP\ResponseStatusInterface;
-use Core\Session\GlobalSession;
 
-class Server {
-	public function recive(): Request {
+class Server implements ServerInterface {
+	public function recive():Request {
 		$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-		//$target = new URL($_SERVER['REQUEST_URI']);
 		$target = $_SERVER['REQUEST_URI'];
-		$version = isset($_SERVER['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']) : '1.1';
-		$head = [];
+		$version = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.1';
+		//$head = apache_request_headers();
 		foreach($_SERVER as $key => $val) {
-			if(strpos($key, 'HTTP_') === 0) {
-				$parts = explode('_', $key);
-				array_shift($parts);
-				$str = '';
-				foreach($parts as $part) {
-					$str .= (empty($str) ? '' : '-') . ucfirst(strtolower($part));
-				}
-				$head[$str] = $val;
+			if(substr($key, 0, strlen('HTTP_')) == 'HTTP_') {
+				$head[ucwords(strtolower(strtr(substr($key, strlen('HTTP_')), '_', '-')), '-')] = $val;
 			}
 		}
+		unset($head['Cookie']);
+		$cookie = $_COOKIE;
 		$body = null;
-		if(!empty($_POST) || !empty($_FILES)) {
-			$files = [];
-			foreach($_FILES as $name => $file) {
-				$diff = (count($file, COUNT_RECURSIVE) - count($file)) / 5;
-				debug($diff);
-				if($diff == 0) {
-					$files[$name] = new UploadedFile($file['tmp_name'], $file['size'], $file['error'], $file['name'], $file['type']);
-					continue;
-				}
-				for($i = 0; $i < $diff; $i++) {
-					$files[$name][] = new UploadedFile($file['tmp_name'][$i], $file['size'][$i], $file['error'][$i], $file['name'][$i], $file['type'][$i]);
-				}
+		if(isset($_SERVER['CONTENT_TYPE'])) {
+			$head['Content-Type'] = $_SERVER['CONTENT_TYPE'];
+			if(substr($head['Content-Type'], 0, strlen('application/x-www-form-urlencoded')) == 'application/x-www-form-urlencoded') {
+				$body = $_POST;
 			}
-			$body = array_merge($_POST, $files);
-		} else {
-			$body = file_get_contents('php://input');
+			if(substr($head['Content-Type'], 0, strlen('multipart/form-data')) == 'multipart/form-data') {
+				$files = [];
+				foreach($_FILES as $name => $file) {
+					$diff = (count($file, COUNT_RECURSIVE) - count($file)) / 5;
+					if($diff == 0) {
+						$files[$name] = new UploadedFile($file['tmp_name'], $file['size'], $file['error'], $file['name'], $file['type']);
+						continue;
+					}
+					for($i = 0; $i < $diff; $i++) {
+						$files[$name][] = new UploadedFile($file['tmp_name'][$i], $file['size'][$i], $file['error'][$i], $file['name'][$i], $file['type'][$i]);
+					}
+				}
+				$body = array_merge(($_POST ?? []), ($files ?? []));
+			}
 		}
+		/*
+		if(isset($_SERVER['CONTENT_LENGTH'])) {
+			$head['Contetnt-Length'] = $_SERVER['CONTENT_LENGTH'];
+		}
+		*/
 		$request = new Request(
 			$method,
 			$target,
 			$version,
 			$head,
+			$cookie,
 			$body
 		);
 		return $request;
 	}
-	public function send(Response $response): void {
+	public function send(Response $response):void {
 		$reason = ResponseStatusInterface::REASONS[$response->status];
-		header("HTTP/{$response->version} {$response->status} $reason", true, $response->status);
-		foreach($response as $key => $val) {
-			if(is_array($val)) {
-				foreach($val as $row) {
-					header("$key: $row");
-				}
-			} else {
-				header("$key: $val");
-			}
+		header("{$response->version} {$response->status} $reason", true, $response->status);
+		foreach($response->cookie as $cookie) {
+			header("Set-Cookie: $cookie");
+		}
+		foreach($response->head as $key => $val) {
+			header("$key: $val");
 		}
 		echo $response->body;
 	}

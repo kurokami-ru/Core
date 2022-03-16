@@ -2,10 +2,10 @@
 
 namespace Core\SMTP;
 
-class Message extends \Core\Comm\Message {
+class Message extends \Core\CC\Message {
 	public function __toString(): string {
 		$str = '';
-		foreach($this as $key => $val) {
+		foreach($this->head as $key => $val) {
 			if(is_array($val)) {
 				foreach($val as $row) {
 					$str .= "$key: $row\r\n";

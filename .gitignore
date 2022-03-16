@@ -1,2 +1,6 @@
 /logs
+/temp
+/vendor/Core/src/OAuth
+/vendor/Core/src/Events
+/vendor/Core/src/SMTP
 _*.php

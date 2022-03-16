@@ -2,93 +2,111 @@
 
 namespace Core\SMTP;
 
-use Core\Comm\ClientInterface;
-use Core\Comm\URL;
-use Core\Comm\Message;
+//use Core\CC\ClientInterface;
+use Core\STL\URL;
+//use Core\CC\Message;
+use Core\SMTP\Exception\ServerConnectionFailedException;
+use Core\SMTP\Exception\GreetingErrorException;
+use Core\SMTP\Exception\AutorizationNotAllowedException;
+use Core\SMTP\Exception\IncorrectUserException;
+use Core\SMTP\Exception\WrongPasswordException;
+use Core\SMTP\Exception\ServerNotAcceptedFromException;
+use Core\SMTP\Exception\ServerNotAcceptedToException;
+use Core\SMTP\Exception\ServerNotAcceptedDataException;
+use Core\SMTP\Exception\SendingErrorException;
+use Core\SMTP\Exception\QuitErrorException;
 
-class Client implements ClientInterface {
-	public function __construct(URL $url, ?float $timeout = null) {
-		if(!$this->conn = fsockopen($url->scheme . '://' . $url->host, $url->port, $errno, $errstr, 10)) {
+class Client /*implements ClientInterface*/ {
+	public function __construct(string $host, ?int $port = null, ?float $timeout = null, ?string $user = null, ?string $pass = null) {
+		if(!$this->conn = fsockopen($host, $port, $errno, $errstr, $timeout)) {
 			throw new ServerConnectionFailedException; 
 		}
-		$this->response('');
-		if(!$this->dialog("EHLO {$url->host}\r\n", '250')) {
-			if(!$this->dialog("HELO {$url->host}\r\n", '250')) {
+		if(!str_starts_with($this->answer(), '220')) {
+			throw new ServerConnectionFailedException; 
+		}
+
+		$this->command("EHLO $host\r\n");
+		if(!str_starts_with($this->answer(), '250')) {
+			$this->command("HELO $host\r\n");
+			if(!str_starts_with($this->answer(), '250')) {
 				throw new GreetingErrorException;
 			}
 		}
 
-		if(!$this->dialog("AUTH LOGIN\r\n", '334')) {
+		$this->command("AUTH LOGIN\r\n");
+		if(!str_starts_with($this->answer(), '334')) {
 			throw new AutorizationNotAllowedException;
 		}
 
-		if(!$this->dialog(base64_encode($url->user)."\r\n", '334')) {
+		$this->command(base64_encode($user)."\r\n");
+		if(!str_starts_with($this->answer(), '334')) {
 			throw new IncorrectUserException;
 		}
 
-		if(!$this->dialog(base64_encode($url->pass)."\r\n", '235')) {
+		$this->command(base64_encode($pass)."\r\n");
+		if(!str_starts_with($this->answer(), '235')) {
 			throw new WrongPasswordException;
 		}
 	}
+	public function __destruct() {
+		$this->command("QUIT\r\n");
+		if(!str_starts_with($this->answer(), '221')) {
+			throw new QuitErrorException;
+		}
+	}
 	public function send(Message $request): Message {
-		//$from = 'rukurokami@yandex.ru';
+		if(!$this->conn) {
+			throw new ServerConnectionFailedException; 
+		}
+
 		preg_match('/<[^>]+>/', $request->head['From'], $email);
 		$from = array_shift($email);
-		//$to = 'rukurokami@yandex.ru';
 		preg_match('/<[^>]+>/', $request->head['To'], $email);
 		$to = array_shift($email);
 		$msg = (string)$request;
-
-		if(!$this->dialog("MAIL FROM:$from SIZE=" . strlen($msg) . "\r\n", '250')) {
+		
+		$this->command("MAIL FROM:$from SIZE=" . strlen($msg) . "\r\n");
+		if(!str_starts_with($this->answer(), '250')) {
 			throw new ServerNotAcceptedFromException;
 		}
 
-		if(!$this->dialog("RCPT TO:$to\r\n", '250')) {
+		$this->command("RCPT TO:$to\r\n");
+		if(!str_starts_with($this->answer(), '250')) {
 			throw new ServerNotAcceptedToException;
 		}
 
-		if(!$this->dialog("DATA\r\n", '354')) {
+		$this->command("DATA\r\n");
+		if(!str_starts_with($this->answer(), '354')) {
 			throw new ServerNotAcceptedDataException;
 		}
 
-		if(!$this->dialog($msg . "\r\n.\r\n", '250')) {
+		$this->command($msg . "\r\n.\r\n");
+		if(!str_starts_with($this->answer(), '250')) {
 			throw new SendingErrorException;
 		}
 
 		return new Message;
 	}
-	public function __destruct() {
-		if(is_resource($this->conn)) {
-			if(!$this->dialog("QUIT\r\n", '221')) {
-				throw new QuitErrorException;
-			}
-			fclose($this->conn);
-		}
-	}
-	protected function dialog($command, $response) {
-		if(!is_resource($this->conn))
-			return false;
-		$this->command($command);
-		return $this->response($response);
-	}
 	protected function command($code) {
+        if (!is_resource($this->conn)) {
+			return;
+		}
 		message("Command: " . $code);
 		fputs($this->conn, $code);
 	}
-	protected function response($code) {
+	protected function answer() {
         if (!is_resource($this->conn)) {
 			return false;
 		}
-		$data = "";
-        while(is_resource($this->conn) && !feof($this->conn)) {
-        	$str = fgets($this->conn, 515);
+		$data = '';
+		while($str = fgets($this->conn, 515)) {
 			$data .= $str;
             if (!isset($str[3]) || $str[3] === ' ' || $str[3] === '\r' || $str[3] === '\n') {
 				break;
 			}
 		}
 		message("Answer: " . $data);
-		return (substr($data, 0, strlen($code)) == $code);
+		return $data;
 	}
 }
 ?>

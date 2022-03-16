@@ -14,6 +14,9 @@ abstract class AbstractFileBased extends Container implements AdapterInterface {
 		$this->url = $url;
 		parent::__construct($this->unserialize());
 	}
+	public function __destruct() {
+		$this->serialize();
+	}
 
 	public function offsetSet(mixed $offset, mixed $value): void {
         parent::offsetSet($offset, $value);

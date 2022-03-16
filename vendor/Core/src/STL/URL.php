@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\CC;
+namespace Core\STL;
 
-use Core\CC\MIMEInterface;
+use Core\STL\MIMEInterface;
 use Core\STL\ImmutableTrait;
 use InvalidArgumentException;
 
